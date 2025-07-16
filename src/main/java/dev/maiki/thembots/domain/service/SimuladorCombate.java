@@ -73,7 +73,10 @@ public class SimuladorCombate {
                     AccionMover a = (AccionMover) accion;
                     Posicion destino = robot.getPosicion().avanzar(robot.getDireccionVector().escalar(a.getDistancia()));
                     if (!arena.dentroDeLimites(destino)) continue;
-                    if (motorColisiones.hayColision(destino, robot.getRadio(), arena.getRobots(), arena.getObstaculos()))
+                    var otrosRobots = arena.getRobots().stream()
+                        .filter(r -> !r.getId().equals(robot.getId()))
+                        .toList();
+                    if (motorColisiones.hayColision(destino, robot.getRadio(), otrosRobots, arena.getObstaculos()))
                         continue;
                     robot.setPosicion(destino);
                     eventos.add(new EventoSimple(tickActual, TipoEvento.MOVIMIENTO_REALIZADO));
