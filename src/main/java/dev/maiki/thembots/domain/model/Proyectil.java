@@ -15,16 +15,16 @@ public class Proyectil {
 
     private final UUID id;
     private final Vector vector;
-    private final double dano;
+    private final double dmg;
     private final UUID origen;
     private final Radio radio;
     private Posicion posicion;
 
-    public Proyectil(UUID id, Posicion posicion, Vector vector, double dano, UUID origen, Radio radio) {
+    public Proyectil(UUID id, Posicion posicion, Vector vector, double dmg, UUID origen, Radio radio) {
         this.id = id;
         this.posicion = posicion;
         this.vector = vector;
-        this.dano = dano;
+        this.dmg = dmg;
         this.origen = origen;
         this.radio = radio;
     }
@@ -48,8 +48,8 @@ public class Proyectil {
         return vector;
     }
 
-    public double getDano() {
-        return dano;
+    public double getDmg() {
+        return dmg;
     }
 
     public UUID getOrigen() {

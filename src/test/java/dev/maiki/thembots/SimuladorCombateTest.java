@@ -6,7 +6,7 @@ import dev.maiki.thembots.domain.model.ResultadoCombate;
 import dev.maiki.thembots.domain.model.Robot;
 import dev.maiki.thembots.domain.model.accion.AccionNada;
 import dev.maiki.thembots.domain.model.enums.EstadoRobot;
-import dev.maiki.thembots.domain.port.Comportamiento;
+import dev.maiki.thembots.domain.ports.Comportamiento;
 import dev.maiki.thembots.domain.service.SimuladorCombate;
 import dev.maiki.thembots.domain.value.Posicion;
 import dev.maiki.thembots.domain.value.Radio;
@@ -77,5 +77,47 @@ public class SimuladorCombateTest {
 
         Posicion finalPos = robot.getPosicion();
         assertTrue(finalPos.getX() < 15); // Debería haberse detenido antes del obstáculo
+    }
+
+
+    @Test
+    public void testSimulacionTresComportamientos() {
+        // Comportamientos
+        Comportamiento cazador = new dev.maiki.thembots.domain.ia.ComportamientoCazador();
+        Comportamiento cobarde = new dev.maiki.thembots.domain.ia.ComportamientoCobarde();
+        Comportamiento patrulla = new dev.maiki.thembots.domain.ia.ComportamientoPatrulla(
+            new Posicion(5, 5), new Posicion(35, 15)
+        );
+
+        // Robots con posiciones separadas
+        Robot botCazador = new Robot(UUID.randomUUID(), "Cazador",
+                                     new Posicion(5, 5), 0,
+                                     new Vida(100), 0, new Radio(1), cazador);
+
+        Robot botCobarde = new Robot(UUID.randomUUID(), "Cobarde",
+                                     new Posicion(35, 5), Math.PI,
+                                     new Vida(100), 0, new Radio(1), cobarde);
+
+        Robot botPatrulla = new Robot(UUID.randomUUID(), "Patrulla",
+                                      new Posicion(20, 15), Math.PI / 2,
+                                      new Vida(100), 0, new Radio(1), patrulla);
+
+        Arena arena = new Arena(40, 20, List.of(botCazador, botCobarde, botPatrulla), List.of());
+        SimuladorCombate simulador = new SimuladorCombate(arena, 100);
+
+        simulador.simularHastaElFinal();
+        ResultadoCombate resultado = simulador.resultadoFinal();
+
+        // Verifica que todos los bots están en el ranking
+        assertEquals(3, resultado.getRanking().size());
+
+        // Imprime el ranking para observación manual
+        System.out.println("Ranking final:");
+        resultado.getRanking().forEach(r -> {
+            System.out.printf("  - %s (Vida: %.1f, Destruido: %s)\n", r.getNombre(), r.getVidaFinal(), r.isDestruido());
+        });
+
+        // Debe haber un ganador o empate
+        assertTrue(resultado.getGanadorId() != null || resultado.isEmpate());
     }
 }

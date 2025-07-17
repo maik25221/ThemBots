@@ -1,4 +1,4 @@
-package dev.maiki.thembots.domain.port;
+package dev.maiki.thembots.domain.ports;
 
 import dev.maiki.thembots.domain.model.accion.Accion;
 import dev.maiki.thembots.domain.percepcion.ContextoPercepcion;

@@ -1,7 +1,7 @@
 package dev.maiki.thembots.domain.model;
 
 import dev.maiki.thembots.domain.model.enums.EstadoRobot;
-import dev.maiki.thembots.domain.port.Comportamiento;
+import dev.maiki.thembots.domain.ports.Comportamiento;
 import dev.maiki.thembots.domain.value.Posicion;
 import dev.maiki.thembots.domain.value.Radio;
 import dev.maiki.thembots.domain.value.Vector;

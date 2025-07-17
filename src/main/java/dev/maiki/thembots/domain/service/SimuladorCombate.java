@@ -111,7 +111,7 @@ public class SimuladorCombate {
             arena.getAlto(),
             p -> arena.eliminarProyectil(p),
             impacto -> {
-                impacto.objetivo().recibirDanio(impacto.proyectil().getDano());
+                impacto.objetivo().recibirDanio(impacto.proyectil().getDmg());
                 acumulador.registrarImpacto(impacto.proyectil(), impacto.objetivo());
                 eventos.add(new EventoSimple(tickActual, TipoEvento.IMPACTO_DETECTADO));
                 if (!impacto.objetivo().estaActivo()) {
@@ -119,7 +119,8 @@ public class SimuladorCombate {
                     eventos.add(new EventoSimple(tickActual, TipoEvento.ROBOT_DESTRUIDO));
                 }
                 arena.eliminarProyectil(impacto.proyectil());
-            }
+            },
+            arena.getObstaculos()
         );
 
         eventos.add(new EventoSimple(tickActual, TipoEvento.TICK_FINALIZADO));

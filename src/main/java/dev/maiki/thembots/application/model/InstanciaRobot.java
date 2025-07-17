@@ -2,7 +2,7 @@ package dev.maiki.thembots.application.model;
 
 
 import dev.maiki.thembots.domain.model.Robot;
-import dev.maiki.thembots.domain.port.Comportamiento;
+import dev.maiki.thembots.domain.ports.Comportamiento;
 import dev.maiki.thembots.domain.value.Posicion;
 import dev.maiki.thembots.domain.value.Radio;
 import dev.maiki.thembots.domain.value.Vida;

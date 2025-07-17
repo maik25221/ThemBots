@@ -36,8 +36,8 @@ public class AcumuladorEstadisticas {
     }
 
     public void registrarImpacto(Proyectil proyectil, Robot objetivo) {
-        stats.get(proyectil.getOrigen()).registrarImpacto(proyectil.getDano());
-        stats.get(objetivo.getId()).registrarDanioRecibido(proyectil.getDano());
+        stats.get(proyectil.getOrigen()).registrarImpacto(proyectil.getDmg());
+        stats.get(objetivo.getId()).registrarDanioRecibido(proyectil.getDmg());
     }
 
     public void registrarDestruccion(Robot robot) {
