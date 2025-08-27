@@ -8,7 +8,7 @@
         <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>mynabo.games</groupId>
+    <groupId>dev.maiki</groupId>
     <artifactId>themBots</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Them Bots</name>
