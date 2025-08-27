@@ -18,7 +18,18 @@ public class ConsolaSerializadorSimulacion {
 
         for (Map.Entry<Integer, List<EventoDeCombate>> tickEntry : historial.entrySet()) {
             int tick = tickEntry.getKey();
-            System.out.println("\n=== Tick " + tick + " ===");
+            
+            // Limpiar pantalla (aproximado para Windows/Linux)
+            System.out.print("\033[2J\033[H");
+            
+            System.out.println("🤖 THEM BOTS - Tick " + tick + " 🤖");
+            
+            // Generar resumen de eventos importantes
+            String resumen = generarResumenTick(tickEntry.getValue());
+            if (!resumen.isEmpty()) {
+                System.out.println("📢 " + resumen);
+            }
+            System.out.println();
 
             char[][] grid = new char[ALTO_CONSOLA][ANCHO_CONSOLA];
             for (int y = 0; y < ALTO_CONSOLA; y++) {
@@ -48,46 +59,80 @@ public class ConsolaSerializadorSimulacion {
                 }
             }
 
-            // Imprimir cuadrícula
+            // Imprimir cuadrícula con bordes
+            System.out.println("┌" + "─".repeat(ANCHO_CONSOLA) + "┐");
             for (int y = 0; y < ALTO_CONSOLA; y++) {
+                System.out.print("│");
                 for (int x = 0; x < ANCHO_CONSOLA; x++) {
                     System.out.print(grid[y][x]);
                 }
-                System.out.println();
+                System.out.println("│");
             }
-
-            // Imprimir eventos del tick
-            for (EventoDeCombate evento : tickEntry.getValue()) {
-                System.out.println("  - " + evento.tipo());
+            System.out.println("└" + "─".repeat(ANCHO_CONSOLA) + "┘");
+            
+            // Mostrar estado de robots
+            System.out.println("\n📊 Estado de robots:");
+            for (Robot robot : arena.getRobots()) {
+                String estado = robot.estaActivo() ? "🟢" : "💀";
+                int[] posConsola = mapear(robot.getPosicion(), anchoArena, altoArena);
+                System.out.printf("  %s %s: (%.1f,%.1f)->[%d,%d] vida: %.0f, cooldown: %.0f\n", 
+                    estado, robot.getNombre(), 
+                    robot.getPosicion().getX(), robot.getPosicion().getY(),
+                    posConsola[0], posConsola[1],
+                    robot.getVida().valor(), robot.getCooldown());
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(800); // Más lento para ver mejor los cambios
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                break;
             }
         }
 
         // Resultado final
-        System.out.println("\n=== Resultado Final ===");
+        System.out.print("\033[2J\033[H");
+        System.out.println("🏆 === RESULTADO FINAL === 🏆");
         if (resultado.isEmpate()) {
-            System.out.println("Empate entre robots.");
+            System.out.println("🤝 ¡EMPATE! Varios robots sobrevivieron");
         } else {
-            System.out.println("Ganador: " + resultado.getGanadorId());
+            var ganador = arena.getRobots().stream()
+                .filter(r -> r.getId().equals(resultado.getGanadorId()))
+                .findFirst();
+            if (ganador.isPresent()) {
+                System.out.println("👑 GANADOR: " + ganador.get().getNombre());
+            }
         }
-        System.out.println("Ticks totales: " + resultado.getTotalTicks());
-        System.out.println("Ranking:");
+        System.out.println("⏱️ Duración: " + resultado.getTickFinal() + " ticks");
+        System.out.println("\n📈 Ranking final:");
         resultado.getRanking().forEach(r -> {
-            System.out.printf("  - %s (Vida: %.1f, Destruido: %s, Disparos: %d, Impactos: %d, Daño causado: %.1f, Daño recibido: %.1f)\n",
-                              r.getNombre(), r.getVidaFinal(), r.isDestruido(), r.getDisparosRealizados(),
-                              r.getImpactosLogrados(), r.getDanoCausado(), r.getDanoRecibido());
+            String icono = r.isDestruido() ? "💀" : "🏅";
+            System.out.printf("  %s %s - Vida: %.1f | Disparos: %d | Impactos: %d | Daño: %.1f\n",
+                              icono, r.getNombre(), r.getVidaFinal(), r.getDisparosRealizados(),
+                              r.getImpactosLogrados(), r.getDanoCausado());
         });
+    }
+    
+    private String generarResumenTick(List<EventoDeCombate> eventos) {
+        long disparos = eventos.stream().filter(e -> e.tipo().toString().contains("DISPARO")).count();
+        long impactos = eventos.stream().filter(e -> e.tipo().toString().contains("IMPACTO")).count();
+        long destrucciones = eventos.stream().filter(e -> e.tipo().toString().contains("DESTRUIDO")).count();
+        
+        if (destrucciones > 0) {
+            return String.format("💥 %d robot(s) destruido(s)!", destrucciones);
+        } else if (impactos > 0) {
+            return String.format("🎯 %d impacto(s) registrado(s)!", impactos);
+        } else if (disparos > 0) {
+            return String.format("🔫 %d disparo(s) realizado(s)", disparos);
+        }
+        return "🤖 Robots en movimiento...";
     }
 
     // Mapea una posición real a la cuadrícula de consola
     private int[] mapear(Posicion pos, double anchoArena, double altoArena) {
-        int x = (int) Math.round(pos.getX() / anchoArena * (ANCHO_CONSOLA - 1));
-        int y = (int) Math.round(pos.getY() / altoArena * (ALTO_CONSOLA - 1));
+        // Usar floor en lugar de round para mejor precisión visual
+        int x = Math.max(0, Math.min(ANCHO_CONSOLA - 1, (int) (pos.getX() / anchoArena * ANCHO_CONSOLA)));
+        int y = Math.max(0, Math.min(ALTO_CONSOLA - 1, (int) (pos.getY() / altoArena * ALTO_CONSOLA)));
         return new int[]{x, y};
     }
 
