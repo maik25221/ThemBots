@@ -22,7 +22,7 @@ public class ResultadoCombate {
         this.ranking = ranking;
     }
 
-    public int getTotalTicks() {
+    public int getTickFinal() {
         return totalTicks;
     }
 

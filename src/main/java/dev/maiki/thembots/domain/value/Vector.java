@@ -26,7 +26,12 @@ public record Vector(double dx, double dy) {
      * Devuelve un nuevo vector escalado por el factor dado.
      */
     public Vector escalar(double factor) {
-        return new Vector(dx * factor, dy * factor);
+        double nuevoDx = dx * factor;
+        double nuevoDy = dy * factor;
+        // Convierte -0.0 a 0.0 para evitar problemas en tests
+        if (nuevoDx == 0.0) nuevoDx = 0.0;
+        if (nuevoDy == 0.0) nuevoDy = 0.0;
+        return new Vector(nuevoDx, nuevoDy);
     }
 
     /**

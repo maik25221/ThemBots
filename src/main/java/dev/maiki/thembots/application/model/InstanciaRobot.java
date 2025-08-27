@@ -36,5 +36,67 @@ public class InstanciaRobot {
         );
     }
 
-    // Getters y setters necesarios para deserialización si procede
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Posicion getPosicionInicial() {
+        return posicionInicial;
+    }
+
+    public void setPosicionInicial(Posicion posicionInicial) {
+        this.posicionInicial = posicionInicial;
+    }
+
+    public double getDireccionInicial() {
+        return direccionInicial;
+    }
+
+    public void setDireccionInicial(double direccionInicial) {
+        this.direccionInicial = direccionInicial;
+    }
+
+    public double getVidaInicial() {
+        return vidaInicial;
+    }
+
+    public void setVidaInicial(double vidaInicial) {
+        this.vidaInicial = vidaInicial;
+    }
+
+    public double getRadio() {
+        return radio;
+    }
+
+    public void setRadio(double radio) {
+        this.radio = radio;
+    }
+
+    public double getCooldown() {
+        return cooldown;
+    }
+
+    public void setCooldown(double cooldown) {
+        this.cooldown = cooldown;
+    }
+
+    public Comportamiento getComportamiento() {
+        return comportamiento;
+    }
+
+    public void setComportamiento(Comportamiento comportamiento) {
+        this.comportamiento = comportamiento;
+    }
 }

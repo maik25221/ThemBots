@@ -7,7 +7,7 @@ package dev.maiki.thembots.domain.value;
 public record Radio(double valor) {
 
     public Radio {
-        if (valor <= 0) {
+        if (valor <= 0 || Double.isNaN(valor)) {
             throw new IllegalArgumentException("El radio debe ser positivo");
         }
     }
@@ -18,5 +18,19 @@ public record Radio(double valor) {
     public boolean colisionaCon(Posicion centro1, Posicion centro2, Radio otroRadio) {
         double distancia = centro1.distanciaA(centro2);
         return distancia <= (this.valor + otroRadio.valor);
+    }
+
+    /**
+     * Calcula el área del círculo con este radio.
+     */
+    public double area() {
+        return Math.PI * valor * valor;
+    }
+
+    /**
+     * Calcula el perímetro del círculo con este radio.
+     */
+    public double perimetro() {
+        return 2 * Math.PI * valor;
     }
 }

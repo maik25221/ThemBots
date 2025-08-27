@@ -24,4 +24,8 @@ public class EventoSimple implements EventoDeCombate {
     public TipoEvento tipo() {
         return tipo;
     }
+
+    public TipoEvento getTipo() {
+        return tipo;
+    }
 }
