@@ -6,6 +6,8 @@ package dev.maiki.thembots.domain.model.enums;
 public enum TipoEvento {
     TICK_INICIADO,
     TICK_FINALIZADO,
+    DECISION_TOMADA,
+    ACCION_EJECUTADA,
     MOVIMIENTO_REALIZADO,
     GIRO_REALIZADO,
     DISPARO_EJECUTADO,
